@@ -1,9 +1,14 @@
 <?php
 
+#$dbname = 'tcc';
+#$dbuser = 'root';  
+#$dbpass = ''; 
+#$dbhost = 'localhost'; 
+
 $dbname = 'tcc';
-$dbuser = 'root';  
-$dbpass = ''; 
-$dbhost = 'localhost'; 
+$dbuser = 'ec2-user';
+$dbpass = 't44zg1g1';
+$dbhost = '3.21.242.90';
 
 $connect = @mysqli_connect($dbhost,$dbuser,$dbpass,$dbname);
 
