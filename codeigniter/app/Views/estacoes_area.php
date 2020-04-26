@@ -6,7 +6,7 @@
 
 <div class="container-fluid py-4">
 
-	<!-- <button onclick="ver()">ver graficos</button> -->
+	 <button onclick="ver()">ver</button> 
 
 	<div class="row" >
 		<div class="col-md-6">
