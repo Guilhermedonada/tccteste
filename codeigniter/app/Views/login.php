@@ -1,5 +1,5 @@
 <?php echo view('componentes/navbar'); ?>
-<form id="login" method="post" action="<?=site_url("Login/autenticar");?>">
+<form id="login" method="post" action="<?=site_url("Login/autenticar");?>" style="margin-top:70px;">
 	<div class="container row pt-5 m-auto" >
 		<div class="col-md-4	 m-auto card p-4">
 			<div class="row text-center">

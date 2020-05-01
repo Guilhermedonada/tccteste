@@ -12,7 +12,7 @@ class Api_acoes extends \CodeIgniter\Controller
 		$acoesModel = new AcoesModel;
 
 		$data = [
-        	'medir' => 0,
+        	'medir' => 1,
         	'data' => date('Y-m-d H:m:s')
 		];
 

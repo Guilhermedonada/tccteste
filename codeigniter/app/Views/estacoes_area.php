@@ -4,13 +4,32 @@
 <!-- SCRIPTS -->
 
 
-<div class="container-fluid py-4">
+<div class="container-fluid py-4" style="margin-top:70px;">
 
-	 <button onclick="ver()">ver</button> 
+	
 
 	<div class="row" >
 		<div class="col-md-6">
 			<div class="card" >
+				<div class="row p-2">
+					<div class="col-md-4">
+						<select class="form-control" onchange="filtro_mes_temperatura(this.value)">
+							<option>Escolha o mês</option>
+							<option value="01">Janeiro</option>
+							<option value="02">Fevereiro</option>
+							<option value="03">Março</option>
+							<option value="04">Abril</option>
+							<option value="05">Maio</option>
+							<option value="06">Junho</option>
+							<option value="07">Julho</option>
+							<option value="08">Agosto</option>
+							<option value="09">Setembro</option>
+							<option value="10">Outubro</option>
+							<option value="11">Novembro</option>
+							<option value="12">Dezembro</option>
+						</select>
+					</div>
+				</div>				
 				<canvas id="temperatura_grafico" height="500"></canvas>
 			</div>
 		</div>
@@ -48,17 +67,11 @@ function realizar_medida(){
 
 
 
-
-
-
-
-
-var periodo = [];
-var temperatura = []; 
-var umidade = []; 
-
-
 $(document).ready(function(){
+	var periodo = [];
+	var temperatura = []; 
+	var umidade = []; 
+
     console.log("onready")
     $.ajax({
 		type:'POST',
@@ -72,8 +85,8 @@ $(document).ready(function(){
 				periodo.push(val.data_upload);
 			})
 
-			ver_temperatura()
-			ver_umidade()
+			ver_temperatura(temperatura,periodo)
+			ver_umidade(umidade,periodo)
 		}
 	})
 
@@ -83,7 +96,14 @@ $(document).ready(function(){
 
 
 
-function ver_temperatura(){
+temperatura_filtro = []
+function filtro_mes_temperatura(mes){
+	
+}
+
+
+
+function ver_temperatura(temperatura,periodo){
 
 	var ctx = document.getElementById('temperatura_grafico').getContext('2d');
 	var chart = new Chart(ctx, {
@@ -140,7 +160,7 @@ function ver_temperatura(){
 
 
 
-function ver_umidade(){
+function ver_umidade(umidade,periodo){
 
 	var ctx = document.getElementById('umidade_grafico').getContext('2d');
 	var chart = new Chart(ctx, {

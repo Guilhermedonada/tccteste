@@ -31,9 +31,13 @@ $lista_registros = (array)json_decode($json);
 foreach ($lista_registros as $key => $registro) {
 	print_r($registro);
 	try{
-	$query = "INSERT INTO estacoes (estacao,temperatura, umidade) VALUES ('$registro->estacao','$registro->temperatura', '$registro->umidade')";}catch(Exception $e){die($e->getMessage());}
+	$query = "INSERT INTO estacoes (estacao,temperatura, umidade) VALUES ('$registro->estacao','$registro->temperatura', '$registro->umidade')";
+	}catch(Exception $e){die($e->getMessage());}
 }
 
+$query_acoes = "UPDATE acoes SET medir = '0' WHERE id = '1' ";
+
+mysqli_query($connect,$query_acoes);
 
 $result = mysqli_query($connect,$query);
 
