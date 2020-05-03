@@ -4,16 +4,22 @@
 <!-- SCRIPTS -->
 
 
-<div class="container-fluid py-4" style="margin-top:70px;">
+<div class="container py-4" style="margin-top:70px;">
 
 	
 	<div class="row">
-		<div class="col-md-3">
-			<button onclick="ligar_on_off()">Acionar ON/OFF</button>
+		<div class="col-md-12">
+			<div class="card">
+				<div class="row p-2">
+					<div class="col-md-2">
+						<button onclick="ligar_on_off() " >Acionar ON/OFF</button>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
-	<div class="row" >
-		<div class="col-md-6">
+	<div class="row mt-5" >
+		<div class="col-md-12">
 			<div class="card" >
 				<div class="row p-2">
 					<div class="col-md-4">
@@ -41,14 +47,15 @@
 				</div>				
 				<canvas id="temperatura_grafico" height="500"></canvas>
 			</div>
-		</div>
-		<div class="col-md-6">
+		</div>	
+	</div>
+	<div class="row mt-5" >
+		<div class="col-md-12">
 			<div class="card" >
 				<canvas id="umidade_grafico" height="500"></canvas>
 			</div>
 		</div>
 	</div>
-
 </div>
 
 
@@ -138,6 +145,9 @@ function ver_temperatura(temperatura,periodo){
 	console.log(periodo)
 	temperatura = temperatura.slice(0,10)
 
+	if (chart) {
+        chart.destroy();
+    }
 
 	var ctx = document.getElementById('temperatura_grafico').getContext('2d');
 	
@@ -176,6 +186,7 @@ function ver_temperatura(temperatura,periodo){
 	   		 }
 	    }
 	});
+
 }
 
 

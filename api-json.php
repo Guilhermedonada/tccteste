@@ -28,12 +28,15 @@ $json = $_GET["json"];
 
 $lista_registros = (array)json_decode($json);
 
+date_default_timezone_set('America/Sao_Paulo');
+$data_horario = date('Y-m-d H:i:s');
+
 
 #print_r($lista_registros);die();
 foreach ($lista_registros as $key => $registro) {
 	print_r($registro);
 	try{
-	$query = "INSERT INTO estacoes (estacao,temperatura, umidade) VALUES ('$registro->estacao','$registro->temperatura', '$registro->umidade')";
+	$query = "INSERT INTO estacoes (estacao,temperatura, umidade,data_upload) VALUES ('$registro->estacao','$registro->temperatura', '$registro->umidade', '$data_horario')";
 	}catch(Exception $e){die($e->getMessage());}
 
 	mysqli_query($connect,$query);
