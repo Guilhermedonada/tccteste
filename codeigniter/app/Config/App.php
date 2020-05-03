@@ -21,8 +21,8 @@ class App extends BaseConfig
 	| environments.
 	|
 	*/
-	//public $baseURL = 'http://iot.plug-in.fun';
-	public $baseURL = 'http://localhost/tccteste/codeigniter/public';
+	public $baseURL = 'http://iot.plug-in.fun';
+	//public $baseURL = 'http://localhost/tccteste/codeigniter/public';
 
 	/*
 	|--------------------------------------------------------------------------
