@@ -7,7 +7,11 @@
 <div class="container-fluid py-4" style="margin-top:70px;">
 
 	
-
+	<div class="row">
+		<div class="col-md-3">
+			<button onclick="ligar_on_off()">Acionar ON/OFF</button>
+		</div>
+	</div>
 	<div class="row" >
 		<div class="col-md-6">
 			<div class="card" >
@@ -28,6 +32,11 @@
 							<option value="11">Novembro</option>
 							<option value="12">Dezembro</option>
 						</select>
+					</div>
+					<div class="col-md-4">
+						<button onclick="get_dados_api()">
+							Atualizar 
+						</button>
 					</div>
 				</div>				
 				<canvas id="temperatura_grafico" height="500"></canvas>
@@ -50,6 +59,19 @@
 <script type="text/javascript">
 
 
+function ligar_on_off(){
+	console.log('clicou')
+	 $.ajax({
+		type:'POST',
+		url:"<?=site_url("Api/Api_acoes/On_Off");?>",
+		success:function(data){
+			console.log(data);
+
+		}
+	})
+}
+
+
 
 
 function realizar_medida(){
@@ -68,6 +90,13 @@ function realizar_medida(){
 
 
 $(document).ready(function(){
+	get_dados_api();
+
+});
+
+
+
+function get_dados_api(){
 	var periodo = [];
 	var temperatura = []; 
 	var umidade = []; 
@@ -85,13 +114,12 @@ $(document).ready(function(){
 				periodo.push(val.data_upload);
 			})
 
+			
 			ver_temperatura(temperatura,periodo)
 			ver_umidade(umidade,periodo)
 		}
 	})
-
-});
-
+}
 
 
 
@@ -105,56 +133,49 @@ function filtro_mes_temperatura(mes){
 
 function ver_temperatura(temperatura,periodo){
 
+	console.log("cortar periodo")
+	periodo = periodo.slice(0,10)
+	console.log(periodo)
+	temperatura = temperatura.slice(0,10)
+
+
 	var ctx = document.getElementById('temperatura_grafico').getContext('2d');
 	var chart = new Chart(ctx, {
-		// The type of chart we want to create
-		type: 'line', // also try bar or other graph types
+	    // The type of chart we want to create
+	    type: 'line',
 
-		// The data for our dataset
-		data: {
-			labels: periodo,
-			// Information about the dataset
-	    datasets: [{
-				label: "Temperatura",
-				backgroundColor: 'transparent',
-				borderColor: 'orange',
-				borderWidth: 1,
-				data: temperatura,
-			}]
-		},
+	    // The data for our dataset
+	    data: {
+	        labels: periodo.reverse(),
+	        datasets: [{
+	            label: 'Temperatura',
+	            backgroundColor: 'transparent',
+	            borderColor: 'rgb(255, 99, 132)',
+	            data: temperatura.reverse()
+	        }]
+	    },
 
-		// Configuration options
-		options: {
-			   responsive: true,
-		    layout: {
-		      padding: 10,
-		    },
-			legend: {
-				position: 'bottom',
-			},
-			title: {
+	    // Configuration options go here
+	    options: {
+    		title: {
 				display: true,
-				text: 'Gráfico Temperatura °C'
+				text: 'Gráfico Temperatura '
 			},
-		
-			scales: {
+	    	scales: {
 		        yAxes: [{
 		        	display: true,
 		            ticks: {
-		            	max: 200,
+		            	max: 70,
 		                beginAtZero:true
 		            }
 		        }],
-		        xAxes: [{
-				    ticks: {
-				        autoSkip: true,
-				        maxTicksLimit: 20 //limita em 20
-				    }
-				}]
+		     	
 	   		 }
-		}
+	    }
 	});
 }
+
+
 
 
 

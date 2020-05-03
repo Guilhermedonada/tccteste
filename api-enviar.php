@@ -20,9 +20,16 @@ if(!$connect){
 //echo "Connection Success!<br><br>";
 
 
-$query = "SELECT medir FROM acoes";
+$query = "SELECT medir FROM acoes WHERE id = '1'";
 
 $result = mysqli_query($connect,$query);
+
+$query_on_off = "SELECT medir FROM acoes WHERE id = '2'";
+
+$result_on_off = mysqli_query($connect,$query_on_off);
+
+$row_on_off = mysqli_fetch_assoc($result_on_off);
+echo $row_on_off['medir']; //retorno pro esp
 
 $row = mysqli_fetch_assoc($result);
 echo $row['medir']; //retorno pro esp

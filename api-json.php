@@ -9,6 +9,8 @@ $dbuser = 'ec2-user';
 $dbpass = 't44zg1g1'; 
 $dbhost = '3.21.242.90'; 
 
+
+
 $connect = @mysqli_connect($dbhost,$dbuser,$dbpass,$dbname);
 
 if(!$connect){
@@ -33,13 +35,15 @@ foreach ($lista_registros as $key => $registro) {
 	try{
 	$query = "INSERT INTO estacoes (estacao,temperatura, umidade) VALUES ('$registro->estacao','$registro->temperatura', '$registro->umidade')";
 	}catch(Exception $e){die($e->getMessage());}
+
+	mysqli_query($connect,$query);
 }
 
 $query_acoes = "UPDATE acoes SET medir = '0' WHERE id = '1' ";
 
 mysqli_query($connect,$query_acoes);
 
-$result = mysqli_query($connect,$query);
+
 
 echo "Insertion Success!<br>";
 
