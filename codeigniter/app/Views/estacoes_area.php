@@ -140,6 +140,9 @@ function ver_temperatura(temperatura,periodo){
 
 
 	var ctx = document.getElementById('temperatura_grafico').getContext('2d');
+	
+
+
 	var chart = new Chart(ctx, {
 	    // The type of chart we want to create
 	    type: 'line',
