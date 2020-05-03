@@ -10,6 +10,7 @@
 	<link rel="stylesheet" type="text/css" href="<?=base_url("/assets/css/");?>/estilo.css"> -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-icons/3.0.1/iconfont/material-icons.min.css" integrity="sha256-x8PYmLKD83R9T/sYmJn1j3is/chhJdySyhet/JuHnfY=" crossorigin="anonymous" />
+  <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet"> 
 	<script
   src="https://code.jquery.com/jquery-3.4.1.min.js"
   integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
@@ -22,19 +23,23 @@
 
 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
 
 </head>
 <?php use App\Models\LoginModel as Auth; ?>
 
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-      <a class="navbar-brand" href="#">Telemetria</a>
+<?php if(Auth::verifica_sessao($redirect=false)): ?>
+
+
+<nav class="navbar navbar-expand-md navbar-dark fixed-top " style="background: #333333!important;">
+     <!--  <a class="navbar-brand" href="#">Telemetria</a> -->
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <?php if(Auth::verifica_sessao($redirect=false)): ?>
-        <button class="btn btn-outline-success" type="button" onclick="realizar_medida()">Medir</button>
-        <a href="#" onClick="window.location.reload();return false;">Reload</a>
+        <button class="btn btn-outline-success" type="button" onclick="realizar_medida()">Realizar Medidas</button>
+       
       <?php endif; ?>
         <ul class="navbar-nav ml-auto">
          
@@ -52,4 +57,34 @@
         </ul>
       </div>
     </nav>
-<body class="" style="overflow-x: hidden;margin-top: 0px;">
+
+  <?php else : ?>
+     
+<nav class="navbar navbar-expand-md fixed-top ">
+     <!--  <a class="navbar-brand" href="#">Telemetria</a> -->
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <?php if(Auth::verifica_sessao($redirect=false)): ?>
+        <button class="btn btn-outline-success" type="button" onclick="realizar_medida()">Medir</button>
+      
+      <?php endif; ?>
+        <ul class="navbar-nav ml-auto">
+         
+          <li class="nav-item">
+
+
+          
+                  <a class="nav-link text-white" href="<?=site_url("Login/login_area");?>">Entrar</a>
+              
+
+           
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+  <?php endif; ?>
+
+<body class="" style="overflow-x: hidden;margin-top: 0px;background: #333333!important;">

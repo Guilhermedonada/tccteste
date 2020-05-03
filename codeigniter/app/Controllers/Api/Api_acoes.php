@@ -24,12 +24,12 @@ class Api_acoes extends \CodeIgniter\Controller
 	}
 
 
-	public function On_Off()
+	public function On_Off($estado)
 	{
 		$acoesModel = new AcoesModel;
 
 		$data = [
-        	'medir' => 1,
+        	'medir' => $estado,
         	'data' => date('Y-m-d H:m:s')
 		];
 
@@ -38,5 +38,13 @@ class Api_acoes extends \CodeIgniter\Controller
   		$mensagem = 'Enviada requisição';
 
 		return $this->respond($mensagem, 200);
+	}
+
+	public function get_On_Off(){
+		$acoesModel = new AcoesModel;
+			
+		$acoes_on_off = $acoesModel->where('id', 2)->find();
+
+		return $this->respond($acoes_on_off, 200);
 	}
 }
