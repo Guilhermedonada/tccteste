@@ -39,6 +39,11 @@
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <?php if(Auth::verifica_sessao($redirect=false)): ?>
         <button class="btn btn-outline-success" type="button" onclick="realizar_medida()">Realizar Medidas</button>
+
+       <button onclick="get_dados_api()" type="button" class="btn  mx-2 btn-outline-primary">
+        Atualizar 
+      </button>
+  
        
       <?php endif; ?>
         <ul class="navbar-nav ml-auto">

@@ -14,4 +14,16 @@ class Api_estacoes extends \CodeIgniter\Controller
 
 		return $this->respond($estacoes, 200);
 	}
+
+	public function Api_filtrar_temperatura($mes, $data_inicial, $data_final)
+	{
+		$estacoesModel = new EstacoesModel;
+
+		$where = "data_upload BETWEEN '2020-".$mes. "-" .$data_inicial.  " 00:00:00' AND '2020-".$mes."-".$data_final. " 00:00:00'";
+
+		$estacoes = $estacoesModel->where($where)->find();;
+
+		
+		return $this->respond($estacoes, 200);
+	}
 }

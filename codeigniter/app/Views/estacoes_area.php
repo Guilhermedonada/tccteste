@@ -28,11 +28,12 @@
 	</div>
 	<div class="row mt-5" >
 		<div class="col-md-12">
-			<div class="card" >
-				<div class="row p-2">
-					<!-- <div class="col-md-4">
-						<select class="form-control" onchange="filtro_mes_temperatura(this.value)">
-							<option>Escolha o mês</option>
+			<div class="card p-4" >
+				<div class="row">
+					 <div class="col-md-2">
+					 	<label>Mês</label>	
+						<select class="form-control" name="mes_temperatura">
+							<option value="00">Escolha o mês</option>
 							<option value="01">Janeiro</option>
 							<option value="02">Fevereiro</option>
 							<option value="03">Março</option>
@@ -46,12 +47,22 @@
 							<option value="11">Novembro</option>
 							<option value="12">Dezembro</option>
 						</select>
-					</div> -->
-					<div class="col-md-4">
-						<button onclick="get_dados_api()">
-							Atualizar 
+					</div> 
+					<div class="col-md-2">
+						<label>Data Inicial</label>
+						<input type="text" name="data_inicial" class="form-control" placeholder="ex: 05">						
+					</div>
+					<div class="col-md-2">		
+						<label>Data Final</label>				
+						<input type="text" name="data_final"  class="form-control"
+						placeholder="ex: 05">
+					</div>
+					<div class="col-md-2">
+						<label>Buscar</label>	
+						<button onclick="filtrar_temperatura()" class="form-control btn-primary">Filtrar
 						</button>
 					</div>
+					<div class="col-md-1"></div>				
 				</div>				
 				<canvas id="temperatura_grafico" height="500"></canvas>
 			</div>
@@ -187,29 +198,64 @@ function get_dados_api(){
 
 
 
-temperatura_filtro = []
-function filtro_mes_temperatura(mes){
+function filtrar_temperatura(){
+
+	var periodo = [];
+	var temperatura = []; 
+	var umidade = []; 
+
+	var mes = $('select[name=mes_temperatura]').val();
+	var data_inicial = $('[name=data_inicial]').val();
+	var data_final = $('[name=data_final]').val();
+
+
+	$.ajax({
+		type:'POST',
+		url:"<?=site_url("Api/Api_estacoes/Api_filtrar_temperatura/");?>" + mes + "/"+data_inicial + "/" + data_final ,
+		success:function(data){
+			console.log(data);
+
+			data.map(function (val){
+				temperatura.push(val.temperatura);
+				umidade.push(val.umidade);
+				periodo.push(val.data_upload);
+			})
+
+
+			ver_temperatura(temperatura,periodo)
+			ver_umidade(umidade,periodo)
+
+			
+	
+		}
+	})
 	
 }
 
 
-
+var chart;
 function ver_temperatura(temperatura,periodo){
 
 	console.log("cortar periodo")
-	periodo = periodo.slice(0,20)
+	//periodo = periodo.slice(0,20)
 	console.log(periodo)
-	temperatura = temperatura.slice(0,20)
+	//temperatura = temperatura.slice(0,20)
+
 
 	if (chart) {
         chart.destroy();
+         console.log(chart)
+        console.log("Existe chart")
     }
+
+
+
 
 	var ctx = document.getElementById('temperatura_grafico').getContext('2d');
 	
 
 
-	var chart = new Chart(ctx, {
+	chart = new Chart(ctx, {
 	    // The type of chart we want to create
 	    type: 'line',
 
@@ -226,6 +272,7 @@ function ver_temperatura(temperatura,periodo){
 
 	    // Configuration options go here
 	    options: {
+	    	 showXLabels: 10,
     		title: {
 				display: true,
 				text: 'Gráfico Temperatura '
@@ -238,6 +285,16 @@ function ver_temperatura(temperatura,periodo){
 		                beginAtZero:true
 		            }
 		        }],
+		         xAxes: [{
+		            ticks: {
+		                autoSkip:true,
+		                maxTicksLimit:20
+		            }, 
+		              scaleLabel: {
+		                display: true,
+		                labelString: "Período"
+		              }
+            	}],
 		     	
 	   		 }
 	    }
@@ -253,8 +310,13 @@ function ver_temperatura(temperatura,periodo){
 
 function ver_umidade(umidade,periodo){
 
-	var ctx = document.getElementById('umidade_grafico').getContext('2d');
-	var chart = new Chart(ctx, {
+	if (chart_umidade) {
+        chart_umidade.destroy();
+        console.log("Existe chart")
+    }
+
+	var ctx_umidade = document.getElementById('umidade_grafico').getContext('2d');
+	var chart_umidade = new Chart(ctx_umidade, {
 		// The type of chart we want to create
 		type: 'line', // also try bar or other graph types
 
