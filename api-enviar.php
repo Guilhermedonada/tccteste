@@ -24,7 +24,7 @@ $query = "SELECT medir FROM acoes WHERE id = '1'";
 
 $result = mysqli_query($connect,$query);
 
-$query_on_off = "SELECT medir FROM acoes WHERE id = '2'";
+$query_on_off = "SELECT medir,canal,limite_inferior,limite_superior FROM acoes WHERE id = '2'";
 
 $result_on_off = mysqli_query($connect,$query_on_off);
 
