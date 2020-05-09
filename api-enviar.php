@@ -33,7 +33,9 @@ echo $row_on_off['medir']; //retorno pro esp
 
 $row = mysqli_fetch_assoc($result);
 echo $row['medir']; //retorno pro esp
-
+echo $row['canal']; //retorno pro esp
+echo $row['limite_inferior']; //retorno pro esp
+echo $row['limite_superior']; //retorno pro esp
 
 //atualiza o banco como false depois da leitura
 //$query = "UPDATE acoes SET medir='FALSE' WHERE id = '1' ";
