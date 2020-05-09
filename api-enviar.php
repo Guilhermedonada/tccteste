@@ -33,7 +33,7 @@ $query_on_off = "SELECT medir,canal,limite_inferior,limite_superior FROM acoes W
 $result_on_off = mysqli_query($connect,$query_on_off);
 
 $row_on_off = mysqli_fetch_assoc($result_on_off);
-echo "".$row['medir']."-".$row['canal']."-".$row['limite_inferior']."-".$row['limite_superior']."";
+echo "".$row_on_off['medir']."-".$row_on_off['canal']."-".$row_on_off['limite_inferior']."-".$row_on_off['limite_superior']."";
 //atualiza o banco como false depois da leitura
 //$query = "UPDATE acoes SET medir='FALSE' WHERE id = '1' ";
 //mysqli_query($connect,$query);
