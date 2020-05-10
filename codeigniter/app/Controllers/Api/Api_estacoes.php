@@ -19,9 +19,9 @@ class Api_estacoes extends \CodeIgniter\Controller
 	{
 		$estacoesModel = new EstacoesModel;
 
-		$where = "data_upload BETWEEN '2020-".$mes. "-" .$data_inicial.  " 00:00:00' AND '2020-".$mes."-".$data_final. " 00:00:00'";
+		$where = "data_upload BETWEEN '2020-".$mes. "-" .$data_inicial.  " 00:00:00' AND '2020-".$mes."-".$data_final. " 23:59:59'";
 
-		$estacoes = $estacoesModel->where($where)->find();;
+		$estacoes = $estacoesModel->where($where)->orderBy('data_upload desc')->find();;
 
 		
 		return $this->respond($estacoes, 200);

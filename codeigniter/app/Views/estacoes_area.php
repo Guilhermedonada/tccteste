@@ -8,19 +8,59 @@
 
 	
 	<div class="row">
-		<div class="col-md-6">
-			<div class="card">
+		<div class="col-md-4">
+			<div class="card h-100">
+						<div class="disable-card-on-off d-none" style="    width: 100%;
+    height: 100%;
+    position: absolute;
+    background: #00000054;
+    z-index: 2;
+    border: none;
+    cursor: not-allowed;"></div>
 
 				<div class="row p-2">
 					<div class="col-md-12">
 						<h5>Ligar Saída ON/OFF</h5>
 					</div>
 
-					<!-- <div class="col-md-2">
-						<button onclick="ligar_on_off() " >Acionar ON/OFF</button>
-					</div> -->
 					<div class="col-md-2">
+						<label>Ativar</label>
 						<input type="checkbox" id="toggle-on-off"  data-toggle="toggle">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-8">
+			<div class="card">
+				<div class="disable-card-limites d-none" style="    width: 100%;
+    height: 100%;
+    position: absolute;
+    background: #00000054;
+    z-index: 2;
+    border: none;
+    cursor: not-allowed;"></div>
+				<div class="row p-2">
+					<div class="col-md-12">
+						<h5>Definir Limite</h5>
+					</div>
+					<div class="col-md-4">
+						<label>Canal</label>	
+						<select class="form-control" name="canal">
+							<option value="00">Escolha o canal</option>
+							<option value="1">Canal 01</option>
+						</select>
+					</div>
+					<div class="col-md-3">
+						<label>Limite Inferior</label>
+						<input type="text" name="limite_inferior" class="form-control" placeholder="ex: 10">	
+					</div>
+					<div class="col-md-3">
+						<label>Limite Superior</label>
+						<input type="text" name="limite_superior" class="form-control" placeholder="ex: 30">	
+					</div>
+					<div class="col-md-2">
+						<label>Ativar</label>
+						<input type="checkbox" id="toggle-limite"  data-toggle="toggle">
 					</div>
 				</div>
 			</div>
@@ -28,7 +68,7 @@
 	</div>
 	<div class="row mt-5" >
 		<div class="col-md-12">
-			<div class="card p-4" >
+			<div class="card p-4" style="max-height: 700px;" >
 				<div class="row">
 					 <div class="col-md-2">
 					 	<label>Mês</label>	
@@ -131,13 +171,13 @@ $(document).ready(function(){
 	$('#toggle-on-off').change(function() {
 		if($(this).prop('checked')){
 			console.log('ligado')
+			$(".disable-card-limites").removeClass('d-none');
 			estado = 1;
 		} else {
 			estado = 0;
 			console.log('desligado')
+			$(".disable-card-limites").addClass('d-none');
 		}
-
-
 		$.ajax({
 			type:'POST',
 			url:"<?=site_url("Api/Api_acoes/On_Off/");?>" + estado,
@@ -145,9 +185,51 @@ $(document).ready(function(){
 				console.log(data);
 
 			}
-		})
-	      
+		})	      
     })
+
+
+
+	var estado = 0;
+	$('#toggle-limite').change(function() {
+		if($(this).prop('checked')){
+			console.log('ligado')
+			$(".disable-card-on-off").removeClass('d-none');
+			estado = 2;
+		} else {
+			estado = 0;
+			console.log('desligado')
+			$(".disable-card-on-off").addClass('d-none');
+		}
+
+
+		var canal = $('select[name=canal]').val();
+		var limite_inferior = $('[name=limite_inferior]').val();
+		var limite_superior = $('[name=limite_superior]').val();
+
+
+		console.log(canal + limite_inferior + limite_superior)
+
+
+		$.ajax({
+			type:'POST',
+			url:"<?=site_url("Api/Api_acoes/Limite/");?>" + estado + "/" + canal + "/"+limite_inferior + "/" + limite_superior ,
+			success:function(data){
+				console.log(data);
+
+			}
+		})	  
+ 
+    })
+
+
+
+
+
+
+
+
+
 
 });
 
@@ -161,7 +243,17 @@ function get_on_off_estado(){
 			if(data[0].medir == 1) {
 				console.log('ligado')
 				$('#toggle-on-off').bootstrapToggle('on')
-			}else {
+				$(".disable-card-limites").removeClass('d-none');
+			}else if (data[0].medir == 2) {
+				$('#toggle-limite').bootstrapToggle('on')
+				$(".disable-card-on-off").removeClass('d-none');
+
+				$('select[name=canal]').val(data[0].canal);
+				$('[name=limite_inferior]').val(data[0].limite_inferior);
+				$('[name=limite_superior]').val(data[0].limite_superior);
+			
+
+			} else {
 				console.log('desligado')
 			}
 
@@ -272,7 +364,10 @@ function ver_temperatura(temperatura,periodo){
 
 	    // Configuration options go here
 	    options: {
-	    	 showXLabels: 10,
+	    	responsive: true,
+
+    maintainAspectRatio: false,
+	    	showXLabels: 10,
     		title: {
 				display: true,
 				text: 'Gráfico Temperatura '
@@ -281,7 +376,7 @@ function ver_temperatura(temperatura,periodo){
 		        yAxes: [{
 		        	display: true,
 		            ticks: {
-		            	max: 70,
+		            	max: 60,
 		                beginAtZero:true
 		            }
 		        }],

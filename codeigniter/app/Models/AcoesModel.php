@@ -8,6 +8,6 @@ class AcoesModel extends Model
     protected $useSoftDeletes = false;
     //protected $softDelete = false;
     protected $returnType = 'object';
-	protected $allowedFields = ['medir', 'data'];
+	protected $allowedFields = ['medir','canal', 'limite_inferior', 'limite_superior' ,'data'];
 
 }

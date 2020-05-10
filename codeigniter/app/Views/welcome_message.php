@@ -24,9 +24,15 @@
 	
 
         <div class="row">
-            <div class="col-md-4 border" style="height: 200px;"></div>
-             <div class="col-md-4 border"></div>
-              <div class="col-md-4 border"></div>
+            <div class="col-md-4 border" style="height: 200px;">
+                <i class="material-icons">eco </i>
+            </div>
+             <div class="col-md-4 border">
+                 <i class="material-icons">cloud_done </i>
+             </div>
+              <div class="col-md-4 border">
+                  <i class="material-icons">equalizer</i>
+              </div>
         </div>
 
 	</div>
@@ -47,7 +53,7 @@
 </div>
 
 
-<div style="height: 100px;width: 60%;margin:0 auto;background: #fff;position: absolute; bottom: 0;right: 0;left: 0;">
+<div style="height: 100px;width: 60%;margin:0 auto;    background: rgba(0, 0, 0, 0.82);position: absolute; bottom: 0;right: 0;left: 0;">
     
     <div class="row">
         <div class="col-md-12">
