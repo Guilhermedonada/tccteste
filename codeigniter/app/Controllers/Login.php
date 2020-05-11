@@ -28,7 +28,7 @@ class Login extends Controller
 		if($usuario){
 			$this->session->set('usuario',$usuario[0]);
 		} else {
-			die();
+			return redirect()->to(site_url('Login/login_area'));
 		}
 		return view('estacoes_area');
 	}

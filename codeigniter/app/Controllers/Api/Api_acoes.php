@@ -75,4 +75,24 @@ class Api_acoes extends \CodeIgniter\Controller
 
 		return $this->respond($mensagem, 200);
 	}
+
+
+	public function DeepSleep($estado)
+	{
+		$acoesModel = new AcoesModel;
+
+		$data = [
+        	'medir' => $estado,
+        	'canal' => 0,
+        	'limite_inferior' => 0,
+        	'limite_superior' => 0,
+        	'data' => date('Y-m-d H:m:s')
+		];
+
+  		$acoesModel->builder()->update(2, $data);
+ 
+  		$mensagem = 'Enviada requisição';
+
+		return $this->respond($mensagem, 200);
+	}
 }

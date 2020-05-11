@@ -7,8 +7,22 @@
 <div class="container py-4" style="margin-top:70px;">
 
 	
-	<div class="row">
-		<div class="col-md-4">
+	<div class="row">		
+		<div class="col-md-2">
+			<div class="card h-100">
+				<div class="row p-2">
+					<div class="col-md-12">
+						<h5>DeepSleep</h5>
+					</div>
+
+					<div class="col-md-2">
+						<label>Ativar</label>
+						<input type="checkbox" id="toggle-deep-sleep"  data-toggle="toggle">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-2">
 			<div class="card h-100">
 						<div class="disable-card-on-off d-none" style="    width: 100%;
     height: 100%;
@@ -20,7 +34,7 @@
 
 				<div class="row p-2">
 					<div class="col-md-12">
-						<h5>Ligar Saída ON/OFF</h5>
+						<h5>ON/OFF</h5>
 					</div>
 
 					<div class="col-md-2">
@@ -223,6 +237,39 @@ $(document).ready(function(){
     })
 
 
+    var estado = 0;
+	$('#toggle-deep-sleep').change(function() {
+
+			if($(this).prop('checked')){
+				console.log('ligado')
+				$(".disable-card-on-off").removeClass('d-none');
+				$(".disable-card-limites").removeClass('d-none');
+				$('#toggle-on-off').bootstrapToggle('off')
+				$('#toggle-limite').bootstrapToggle('off')
+				estado = 3;
+			} else {
+				estado = 0;
+				console.log('desligado')
+				$(".disable-card-on-off").addClass('d-none');
+				$(".disable-card-limites").addClass('d-none');
+			}
+
+			$.ajax({
+				type:'POST',
+				url:"<?=site_url("Api/Api_acoes/DeepSleep/");?>" + estado,
+				success:function(data){
+					console.log(data);
+
+				}
+			})
+ 
+    })
+
+
+
+    
+
+
 
 
 
@@ -253,6 +300,10 @@ function get_on_off_estado(){
 				$('[name=limite_superior]').val(data[0].limite_superior);
 			
 
+			} else if(data[0].medir == 3){
+				$('#toggle-deep-sleep').bootstrapToggle('on')
+				$(".disable-card-on-off").removeClass('d-none');
+				$(".disable-card-limites").removeClass('d-none');
 			} else {
 				console.log('desligado')
 			}
@@ -358,6 +409,7 @@ function ver_temperatura(temperatura,periodo){
 	            label: 'Temperatura',
 	            backgroundColor: 'transparent',
 	            borderColor: 'green',
+	            borderWidth: 1,
 	            data: temperatura.reverse()
 	        }]
 	    },
