@@ -209,17 +209,20 @@ $(document).ready(function(){
 		if($(this).prop('checked')){
 			console.log('ligado')
 			$(".disable-card-on-off").removeClass('d-none');
+			var limite_inferior = $('[name=limite_inferior]').val();
+			var limite_superior = $('[name=limite_superior]').val();
 			estado = 2;
 		} else {
 			estado = 0;
 			console.log('desligado')
 			$(".disable-card-on-off").addClass('d-none');
+			var limite_inferior = 0;
+			var limite_superior = 0;
 		}
 
 
 		var canal = $('select[name=canal]').val();
-		var limite_inferior = $('[name=limite_inferior]').val();
-		var limite_superior = $('[name=limite_superior]').val();
+
 
 
 		console.log(canal + limite_inferior + limite_superior)
@@ -242,10 +245,11 @@ $(document).ready(function(){
 
 			if($(this).prop('checked')){
 				console.log('ligado')
+							$('#toggle-on-off').bootstrapToggle('off')
+				$('#toggle-limite').bootstrapToggle('off')
 				$(".disable-card-on-off").removeClass('d-none');
 				$(".disable-card-limites").removeClass('d-none');
-				$('#toggle-on-off').bootstrapToggle('off')
-				$('#toggle-limite').bootstrapToggle('off')
+	
 				estado = 3;
 			} else {
 				estado = 0;
