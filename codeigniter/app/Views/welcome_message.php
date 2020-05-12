@@ -66,10 +66,14 @@
           <label class="font-weight-bold text-white">Instituição</label>
           <p class="text-muted">Desenolvimento do trabalho de conclusão em Engenharia Elétrica</p>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-3">
           <label class="font-weight-bold text-white">Contato</label>
             <p class="text-white" style="font-size: 14px;">Guilherme Donada</p>
             <a href="https://www.linkedin.com/in/guilherme-donada-667a94191/">Linkedin</a>
+        </div>
+         <div class="col-md-3">
+          <label class="font-weight-bold text-white">Orientador</label>
+            <p class="text-white" style="font-size: 14px;">Paulo Cesar Godoy</p>
         </div>
     
     </div>
