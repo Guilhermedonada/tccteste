@@ -16,12 +16,12 @@
   integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
   crossorigin="anonymous"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 
 
-
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
 
@@ -40,7 +40,7 @@
         <?php if(Auth::verifica_sessao($redirect=false)): ?>
         <button class="btn btn-outline-success" type="button" onclick="realizar_medida()">Realizar Medidas</button>
 
-       <button onclick="get_dados_api()" type="button" class="btn  mx-2 btn-outline-primary">
+       <button onclick="atualizar()" type="button" class="btn  mx-2 btn-outline-primary">
         Atualizar 
       </button>
   

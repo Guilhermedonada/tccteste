@@ -24,14 +24,16 @@
 		</div>
 		<div class="col-md-2">
 			<div class="card h-100">
-						<div class="disable-card-on-off d-none" style="    width: 100%;
-    height: 100%;
-    position: absolute;
-    background: #00000054;
-    z-index: 2;
-    border: none;
-    cursor: not-allowed;"></div>
-
+				<div class="disable-card-on-off d-none" 
+				style="    
+					width: 100%;
+				    height: 100%;
+				    position: absolute;
+				    background: #00000054;
+				    z-index: 2;
+				    border: none;
+				    cursor: not-allowed;">			    	
+			    </div>
 				<div class="row p-2">
 					<div class="col-md-12">
 						<h5>ON/OFF</h5>
@@ -62,6 +64,7 @@
 						<select class="form-control" name="canal">
 							<option value="00">Escolha o canal</option>
 							<option value="1">Canal 01</option>
+							<option value="2">Canal 02</option>
 						</select>
 					</div>
 					<div class="col-md-3">
@@ -86,7 +89,7 @@
 				<div class="row">
 					 <div class="col-md-2">
 					 	<label>Mês</label>	
-						<select class="form-control" name="mes_temperatura">
+						<select class="form-control" name="mes_01">
 							<option value="00">Escolha o mês</option>
 							<option value="01">Janeiro</option>
 							<option value="02">Fevereiro</option>
@@ -113,22 +116,58 @@
 					</div>
 					<div class="col-md-2">
 						<label>Buscar</label>	
-						<button onclick="filtrar_temperatura()" class="form-control btn-primary">Filtrar
+						<button onclick="filtrar_grafico_01()" class="form-control btn-primary">Filtrar
 						</button>
 					</div>
 					<div class="col-md-1"></div>				
 				</div>				
-				<canvas id="temperatura_grafico" height="500"></canvas>
+				  <div id="sensor_01" class="w-100" style="height: 500px;"></div>
 			</div>
 		</div>	
 	</div>
 	<div class="row mt-5" >
 		<div class="col-md-12">
-			<div class="card" >
-				<canvas id="umidade_grafico" height="500"></canvas>
+			<div class="card p-4" >
+				<div class="row">
+					 <div class="col-md-2">
+					 	<label>Mês</label>	
+						<select class="form-control" name="mes_02">
+							<option value="00">Escolha o mês</option>
+							<option value="01">Janeiro</option>
+							<option value="02">Fevereiro</option>
+							<option value="03">Março</option>
+							<option value="04">Abril</option>
+							<option value="05">Maio</option>
+							<option value="06">Junho</option>
+							<option value="07">Julho</option>
+							<option value="08">Agosto</option>
+							<option value="09">Setembro</option>
+							<option value="10">Outubro</option>
+							<option value="11">Novembro</option>
+							<option value="12">Dezembro</option>
+						</select>
+					</div> 
+					<div class="col-md-2">
+						<label>Data Inicial</label>
+						<input type="text" name="data_inicial_02" class="form-control" placeholder="ex: 05">						
+					</div>
+					<div class="col-md-2">		
+						<label>Data Final</label>				
+						<input type="text" name="data_final_02"  class="form-control"
+						placeholder="ex: 05">
+					</div>
+					<div class="col-md-2">
+						<label>Buscar</label>	
+						<button onclick="filtrar_grafico_02(500)" class="form-control btn-primary">Filtrar
+						</button>
+					</div>
+					<div class="col-md-1"></div>				
+				</div>				
+				  <div id="sensor_02" style="height: 500px;"></div>
 			</div>
 		</div>
 	</div>
+	  <!-- <div id="sensor_01" style="height: 500px;"></div> -->
 </div>
 
 
@@ -138,6 +177,185 @@
 
 <script type="text/javascript">
 
+google.charts.load('current', {packages: ['corechart', 'line']});
+google.charts.setOnLoadCallback(filtrar_grafico_01());
+google.charts.setOnLoadCallback(filtrar_grafico_02());
+
+function filtrar_grafico_01(){
+	var quantidade = 500;
+	var mes = $('select[name=mes_01]').val();
+	var data_inicial = $('[name=data_inicial_01]').val();
+	var data_final = $('[name=data_final_01]').val();
+
+	grafico_01(quantidade,mes, data_inicial, data_final)
+}
+
+function filtrar_grafico_02(){
+	var quantidade = 500;
+	var mes = $('select[name=mes_02]').val();
+	var data_inicial = $('[name=data_inicial_02]').val();
+	var data_final = $('[name=data_final_02]').val();
+
+	grafico_02(quantidade,mes, data_inicial, data_final)
+}
+
+
+
+
+
+
+async function ler_sensores(quantidade, mes, data_inicial, data_final){
+	//primeira vez que entra
+	if(mes == "00"){
+		mes = data_inicial = data_final = '0';
+	}
+	console.log("valores")
+	console.log(quantidade + mes + data_final + data_inicial)
+	
+	var medidas = null;
+    medidas = $.ajax({
+		type:'POST',
+		url:"<?=site_url("Api/Api_estacoes/ler_sensores/");?>"+ quantidade + "/"+ mes + "/"+data_inicial + "/" + 	data_final ,
+		success:function(response){
+			return response
+		},
+		error: function(err) {console.log(err)} 
+	})
+	return medidas	
+}
+
+
+
+
+async function grafico_01(quantidade, mes, data_inicial, data_final) {
+
+    var medidas = await ler_sensores(quantidade,mes, data_inicial, data_final)
+	
+    var data = new google.visualization.DataTable();
+    dateFormatter = new google.visualization.DateFormat();
+    
+    data.addColumn('string', 'Periodo');
+    data.addColumn('number', 'Temperatura');
+	
+	dataRows = []
+	x_eixo = []
+	medidas = medidas.reverse()
+	for (var i = 0; i < medidas.length; i++) {	
+	 	dataRows.push([
+	    	dateFormatter.formatValue(new Date(medidas[i].data_upload)), 
+	    	parseFloat( medidas[i].temperatura) 
+	    ]);	
+
+	 	//vai mostrar os valores do eixo x
+	    if(i % 100 == 0){
+	    	console.log('é 0')
+	    	x_eixo.push(new Date(medidas[i].data_upload))
+	    }
+
+	} 	
+ 	data.addRows(dataRows)
+
+	var options = {
+	    // title: 'Temperatura',
+        curveType: 'function',
+        legend: { position: 'top' },
+	     	
+	    hAxis: {
+	    	//format:'hh:mm a',
+	    	textStyle : {
+            	fontSize: 12 // or the number you want
+        	}
+	    },
+	    vAxis: {
+	    	title: 'Temperatura'
+	    }
+
+	};
+
+
+	var chart = new google.visualization.LineChart(document.getElementById('sensor_01'));
+	//var chart = new google.charts.Line(document.getElementById('sensor_01'));
+
+	chart.draw(data, options);
+}
+
+
+
+
+//GRAFICO 2
+async function grafico_02(quantidade, mes, data_inicial, data_final) {
+
+    var medidas = await ler_sensores(quantidade,mes, data_inicial, data_final)
+	
+    var data = new google.visualization.DataTable();
+    dateFormatter = new google.visualization.DateFormat();
+    
+    data.addColumn('string', 'Periodo');
+    data.addColumn('number', 'Umidade do Solo');
+	
+	dataRows = []
+	medidas = medidas.reverse()
+	for (var i = 0; i < medidas.length; i++) {	
+	 	dataRows.push([
+	    	dateFormatter.formatValue(new Date(medidas[i].data_upload)), 
+	    	parseFloat( medidas[i].umidade) 
+	    ]);	   
+	} 	
+ 	data.addRows(dataRows)
+
+	var options = {
+		// title: 'Umidade do solo',
+        curveType: 'function',
+        legend: { position: 'top' },
+	   	colors: ['#e0440e'],	
+	    hAxis: {
+	    	format:'hh:mm a',
+	    	textStyle : {
+            	fontSize: 12 // or the number you want
+        	}
+	    },
+	    vAxis: {
+	    	title: 'Umidade do solo (%)'
+	    }
+	};
+
+	var chart = new google.visualization.LineChart(document.getElementById('sensor_02'));
+	//var chart = new google.charts.Line(document.getElementById('sensor_01'));
+
+	chart.draw(data, options);
+}
+
+
+
+function atualizar () {
+	$('select[name=mes_01]').val('00');
+	$('[name=data_inicial_01]').val();
+	$('[name=data_final_01]').val();
+	$('select[name=mes_02]').val('00');
+	$('[name=data_inicial_02]').val();
+	$('[name=data_final_02]').val();
+	filtrar_grafico_01()
+	filtrar_grafico_02()
+}
+
+
+
+
+
+
+
+
+//REFERENTE A SAIDAS
+function realizar_medida(){
+	console.log('clicou')
+	 $.ajax({
+		type:'POST',
+		url:"<?=site_url("Api/Api_acoes");?>",
+		success:function(data){
+			console.log(data);
+		}
+	})
+}
 
 function ligar_on_off(){
 	console.log('clicou')
@@ -150,141 +368,6 @@ function ligar_on_off(){
 		}
 	})
 }
-
-
-
-
-function realizar_medida(){
-	console.log('clicou')
-	 $.ajax({
-		type:'POST',
-		url:"<?=site_url("Api/Api_acoes");?>",
-		success:function(data){
-			console.log(data);
-
-		}
-	})
-}
-
-
-
-
-$(document).ready(function(){
-	get_dados_api();
-
-
-	get_on_off_estado();
-
-
-
-
-	
-
-
-	var estado = 0;
-	$('#toggle-on-off').change(function() {
-		if($(this).prop('checked')){
-			console.log('ligado')
-			$(".disable-card-limites").removeClass('d-none');
-			estado = 1;
-		} else {
-			estado = 0;
-			console.log('desligado')
-			$(".disable-card-limites").addClass('d-none');
-		}
-		$.ajax({
-			type:'POST',
-			url:"<?=site_url("Api/Api_acoes/On_Off/");?>" + estado,
-			success:function(data){
-				console.log(data);
-
-			}
-		})	      
-    })
-
-
-
-	var estado = 0;
-	$('#toggle-limite').change(function() {
-		if($(this).prop('checked')){
-			console.log('ligado')
-			$(".disable-card-on-off").removeClass('d-none');
-			var limite_inferior = $('[name=limite_inferior]').val();
-			var limite_superior = $('[name=limite_superior]').val();
-			estado = 2;
-		} else {
-			estado = 0;
-			console.log('desligado')
-			$(".disable-card-on-off").addClass('d-none');
-			var limite_inferior = 0;
-			var limite_superior = 0;
-		}
-
-
-		var canal = $('select[name=canal]').val();
-
-
-
-		console.log(canal + limite_inferior + limite_superior)
-
-
-		$.ajax({
-			type:'POST',
-			url:"<?=site_url("Api/Api_acoes/Limite/");?>" + estado + "/" + canal + "/"+limite_inferior + "/" + limite_superior ,
-			success:function(data){
-				console.log(data);
-
-			}
-		})	  
- 
-    })
-
-
-    var estado = 0;
-	$('#toggle-deep-sleep').change(function() {
-
-			if($(this).prop('checked')){
-				console.log('ligado')
-							$('#toggle-on-off').bootstrapToggle('off')
-				$('#toggle-limite').bootstrapToggle('off')
-				$(".disable-card-on-off").removeClass('d-none');
-				$(".disable-card-limites").removeClass('d-none');
-	
-				estado = 3;
-			} else {
-				estado = 0;
-				console.log('desligado')
-				$(".disable-card-on-off").addClass('d-none');
-				$(".disable-card-limites").addClass('d-none');
-			}
-
-			$.ajax({
-				type:'POST',
-				url:"<?=site_url("Api/Api_acoes/DeepSleep/");?>" + estado,
-				success:function(data){
-					console.log(data);
-
-				}
-			})
- 
-    })
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-});
-
-
 
 function get_on_off_estado(){
 	$.ajax({
@@ -317,199 +400,87 @@ function get_on_off_estado(){
 }
 
 
-function get_dados_api(){
-	var periodo = [];
-	var temperatura = []; 
-	var umidade = []; 
 
-    console.log("onready")
-    $.ajax({
-		type:'POST',
-		url:"<?=site_url("Api/Api_estacoes");?>",
-		success:function(data){
-			console.log(data);
-
-			data.map(function (val){
-				temperatura.push(val.temperatura);
-				umidade.push(val.umidade);
-				periodo.push(val.data_upload);
-			})
-
-			
-			ver_temperatura(temperatura,periodo)
-			ver_umidade(umidade,periodo)
+$(document).ready(function(){
+	get_on_off_estado();
+	var estado = 0;
+	$('#toggle-on-off').change(function() {
+		if($(this).prop('checked')){
+			console.log('ligado')
+			$(".disable-card-limites").removeClass('d-none');
+			estado = 1;
+		} else {
+			estado = 0;
+			console.log('desligado')
+			$(".disable-card-limites").addClass('d-none');
 		}
-	})
-}
+		$.ajax({
+			type:'POST',
+			url:"<?=site_url("Api/Api_acoes/On_Off/");?>" + estado,
+			success:function(data){
+				console.log(data);
 
-
-
-
-function filtrar_temperatura(){
-
-	var periodo = [];
-	var temperatura = []; 
-	var umidade = []; 
-
-	var mes = $('select[name=mes_temperatura]').val();
-	var data_inicial = $('[name=data_inicial]').val();
-	var data_final = $('[name=data_final]').val();
-
-
-	$.ajax({
-		type:'POST',
-		url:"<?=site_url("Api/Api_estacoes/Api_filtrar_temperatura/");?>" + mes + "/"+data_inicial + "/" + data_final ,
-		success:function(data){
-			console.log(data);
-
-			data.map(function (val){
-				temperatura.push(val.temperatura);
-				umidade.push(val.umidade);
-				periodo.push(val.data_upload);
-			})
-
-
-			ver_temperatura(temperatura,periodo)
-			ver_umidade(umidade,periodo)
-
-			
-	
+			}
+		})	      
+    })
+	var estado = 0;
+	$('#toggle-limite').change(function() {
+		if($(this).prop('checked')){
+			console.log('ligado')
+			$(".disable-card-on-off").removeClass('d-none');
+			var limite_inferior = $('[name=limite_inferior]').val();
+			var limite_superior = $('[name=limite_superior]').val();
+			estado = 2;
+		} else {
+			estado = 0;
+			console.log('desligado')
+			$(".disable-card-on-off").addClass('d-none');
+			var limite_inferior = 0;
+			var limite_superior = 0;
 		}
-	})
-	
-}
+		var canal = $('select[name=canal]').val();
+		console.log(canal + limite_inferior + limite_superior)
+		$.ajax({
+			type:'POST',
+			url:"<?=site_url("Api/Api_acoes/Limite/");?>" + estado + "/" + canal + "/"+limite_inferior + "/" + limite_superior ,
+			success:function(data){
+				console.log(data);
+			}
+		})	  
+ 
+    })
 
+    var estado = 0;
+	$('#toggle-deep-sleep').change(function() {
+		if($(this).prop('checked')){
+			console.log('ligado')
+						$('#toggle-on-off').bootstrapToggle('off')
+			$('#toggle-limite').bootstrapToggle('off')
+			$(".disable-card-on-off").removeClass('d-none');
+			$(".disable-card-limites").removeClass('d-none');
 
-var chart;
-function ver_temperatura(temperatura,periodo){
-
-	console.log("cortar periodo")
-	//periodo = periodo.slice(0,20)
-	console.log(periodo)
-	//temperatura = temperatura.slice(0,20)
-
-
-	if (chart) {
-        chart.destroy();
-         console.log(chart)
-        console.log("Existe chart")
-    }
-
-
-
-
-	var ctx = document.getElementById('temperatura_grafico').getContext('2d');
-	
-
-
-	chart = new Chart(ctx, {
-	    // The type of chart we want to create
-	    type: 'line',
-
-	    // The data for our dataset
-	    data: {
-	        labels: periodo.reverse(),
-	        datasets: [{
-	            label: 'Temperatura',
-	            backgroundColor: 'transparent',
-	            borderColor: 'green',
-	            borderWidth: 1,
-	            data: temperatura.reverse()
-	        }]
-	    },
-
-	    // Configuration options go here
-	    options: {
-	    	responsive: true,
-
-    maintainAspectRatio: false,
-	    	showXLabels: 10,
-    		title: {
-				display: true,
-				text: 'Gráfico Temperatura '
-			},
-	    	scales: {
-		        yAxes: [{
-		        	display: true,
-		            ticks: {
-		            	max: 60,
-		                beginAtZero:true
-		            }
-		        }],
-		         xAxes: [{
-		            ticks: {
-		                autoSkip:true,
-		                maxTicksLimit:20
-		            }, 
-		              scaleLabel: {
-		                display: true,
-		                labelString: "Período"
-		              }
-            	}],
-		     	
-	   		 }
-	    }
-	});
-
-}
-
-
-
-
-
-
-
-function ver_umidade(umidade,periodo){
-
-	if (chart_umidade) {
-        chart_umidade.destroy();
-        console.log("Existe chart")
-    }
-
-	var ctx_umidade = document.getElementById('umidade_grafico').getContext('2d');
-	var chart_umidade = new Chart(ctx_umidade, {
-		// The type of chart we want to create
-		type: 'line', // also try bar or other graph types
-
-		// The data for our dataset
-		data: {
-			labels: periodo,
-			// Information about the dataset
-	    datasets: [{
-				label: "Umidade",
-				backgroundColor: 'transparent',
-				borderColor: 'royalblue',
-				borderWidth: 1,
-				data: umidade,
-			}]
-		},
-
-		// Configuration options
-		options: {
-			   responsive: true,
-		    layout: {
-		      padding: 10,
-		    },
-			legend: {
-				position: 'bottom',
-			},
-			title: {
-				display: true,
-				text: 'Gráfico Umidade (nao esta funcionando ainda)'
-			},
-		
-			scales: {
-		        yAxes: [{
-		        	display: true,
-		            ticks: {
-		            	max: 200,
-		                beginAtZero:true
-		            }
-		        }]
-	   		 }
+			estado = 3;
+		} else {
+			estado = 0;
+			console.log('desligado')
+			$(".disable-card-on-off").addClass('d-none');
+			$(".disable-card-limites").addClass('d-none');
 		}
-	});
-}
+
+		$.ajax({
+			type:'POST',
+			url:"<?=site_url("Api/Api_acoes/DeepSleep/");?>" + estado,
+			success:function(data){
+				console.log(data);
+
+			}
+		}) 
+    })
+});
+
+
+
+
 
 
 </script>

@@ -15,15 +15,24 @@ class Api_estacoes extends \CodeIgniter\Controller
 		return $this->respond($estacoes, 200);
 	}
 
-	public function Api_filtrar_temperatura($mes, $data_inicial, $data_final)
+	public function ler_sensores($quantidade, $mes, $data_inicial, $data_final)
 	{
 		$estacoesModel = new EstacoesModel;
 
-		$where = "data_upload BETWEEN '2020-".$mes. "-" .$data_inicial.  " 00:00:00' AND '2020-".$mes."-".$data_final. " 23:59:59'";
-
-		$estacoes = $estacoesModel->where($where)->orderBy('data_upload desc')->find();;
-
+		//filtro
+		if(($mes != '0') && ($data_inicial != '0') && ($data_final != '0')){
 		
+			$where = "data_upload BETWEEN '2020-".$mes. "-" .$data_inicial.  " 00:00:00' AND '2020-".$mes."-".$data_final. " 23:59:59'";
+
+			$estacoes = $estacoesModel->where($where)->orderBy('data_upload desc')->find();
+
+		} else {
+			// print_r("entrou else");
+			$estacoes = $estacoesModel->limit($quantidade)->orderBy('data_upload desc')->find();
+		}
+	
+
 		return $this->respond($estacoes, 200);
 	}
+
 }
