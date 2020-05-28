@@ -107,11 +107,11 @@
 					</div> 
 					<div class="col-md-2">
 						<label>Data Inicial</label>
-						<input type="text" name="data_inicial" class="form-control" placeholder="ex: 05">						
+						<input type="text" name="data_inicial_01" class="form-control" placeholder="ex: 05">						
 					</div>
 					<div class="col-md-2">		
 						<label>Data Final</label>				
-						<input type="text" name="data_final"  class="form-control"
+						<input type="text" name="data_final_01"  class="form-control"
 						placeholder="ex: 05">
 					</div>
 					<div class="col-md-2">
@@ -119,7 +119,11 @@
 						<button onclick="filtrar_grafico_01()" class="form-control btn-primary">Filtrar
 						</button>
 					</div>
-					<div class="col-md-1"></div>				
+					<div class="col-md-2">
+						<label>Limpar</label>	
+						<button onclick="limpar_filtro_01()" class="form-control btn-warning">Limpar
+						</button>
+					</div>				
 				</div>				
 				  <div id="sensor_01" class="w-100" style="height: 500px;"></div>
 			</div>
@@ -161,7 +165,11 @@
 						<button onclick="filtrar_grafico_02(500)" class="form-control btn-primary">Filtrar
 						</button>
 					</div>
-					<div class="col-md-1"></div>				
+					<div class="col-md-2">
+						<label>Limpar</label>	
+						<button onclick="limpar_filtro_02()" class="form-control btn-warning">Limpar
+						</button>
+					</div>							
 				</div>				
 				  <div id="sensor_02" style="height: 500px;"></div>
 			</div>
@@ -234,24 +242,19 @@ async function grafico_01(quantidade, mes, data_inicial, data_final) {
     var data = new google.visualization.DataTable();
     dateFormatter = new google.visualization.DateFormat();
     
-    data.addColumn('string', 'Periodo');
+    data.addColumn('datetime', 'Periodo');
     data.addColumn('number', 'Temperatura');
 	
 	dataRows = []
-	x_eixo = []
 	medidas = medidas.reverse()
 	for (var i = 0; i < medidas.length; i++) {	
+		 // new Date(Date.UTC(t[0], t[1]-1, t[2], t[3], t[4], t[5])); padrao americano
+		var t = medidas[i].data_upload.split(/[- :]/);
+		var data_hora = new Date(t[0], t[1]-1, t[2], t[3], t[4], t[5]);
 	 	dataRows.push([
-	    	dateFormatter.formatValue(new Date(medidas[i].data_upload)), 
+	    	data_hora, 
 	    	parseFloat( medidas[i].temperatura) 
 	    ]);	
-
-	 	//vai mostrar os valores do eixo x
-	    if(i % 100 == 0){
-	    	console.log('é 0')
-	    	x_eixo.push(new Date(medidas[i].data_upload))
-	    }
-
 	} 	
  	data.addRows(dataRows)
 
@@ -264,10 +267,30 @@ async function grafico_01(quantidade, mes, data_inicial, data_final) {
 	    	//format:'hh:mm a',
 	    	textStyle : {
             	fontSize: 12 // or the number you want
-        	}
+        	},
+        	
+        	viewWindow: {
+        		min: dataRows[0][0],
+        		max: dataRows[dataRows.length - 1][0]
+        	},
+        	gridlines: {
+        		count: 0,
+                color: 'transparent',
+		    	count: -1,
+		    	units: {
+		    		days:{format: ['MMM dd']},
+		    		hours:{format: ['HH:mm']},
+		    	}
+		    },
+		    minorGridlines: {
+		    	units: {
+		    		hours: {format: ['hh:mm:ss', 'ha']},
+		    		minutes: {format: ['HH:mm ', 'HH:mm']}
+		    	}
+		    },
 	    },
 	    vAxis: {
-	    	title: 'Temperatura'
+	    	title: 'Temperatura (°C)'
 	    }
 
 	};
@@ -290,33 +313,55 @@ async function grafico_02(quantidade, mes, data_inicial, data_final) {
     var data = new google.visualization.DataTable();
     dateFormatter = new google.visualization.DateFormat();
     
-    data.addColumn('string', 'Periodo');
+    data.addColumn('datetime', 'Periodo');
     data.addColumn('number', 'Umidade do Solo');
 	
 	dataRows = []
 	medidas = medidas.reverse()
 	for (var i = 0; i < medidas.length; i++) {	
+ 		var t = medidas[i].data_upload.split(/[- :]/);
+		var data_hora = new Date(t[0], t[1]-1, t[2], t[3], t[4], t[5]);
 	 	dataRows.push([
-	    	dateFormatter.formatValue(new Date(medidas[i].data_upload)), 
+	    	data_hora, 
 	    	parseFloat( medidas[i].umidade) 
 	    ]);	   
 	} 	
  	data.addRows(dataRows)
 
 	var options = {
-		// title: 'Umidade do solo',
+	    // title: 'Temperatura',
+	    colors: ['#e0440e'],
         curveType: 'function',
         legend: { position: 'top' },
-	   	colors: ['#e0440e'],	
+	     	
 	    hAxis: {
-	    	format:'hh:mm a',
+	    	//format:'hh:mm a',
 	    	textStyle : {
             	fontSize: 12 // or the number you want
-        	}
+        	},
+        	
+        	viewWindow: {
+        		min: dataRows[0][0],
+        		max: dataRows[dataRows.length - 1][0]
+        	},
+        	gridlines: {
+		    	count: -1,
+		    	units: {
+		    		days:{format: ['MMM dd']},
+		    		hours:{format: ['HH:mm']},
+		    	}
+		    },
+		    minorGridlines: {
+		    	units: {
+		    		hours: {format: ['hh:mm:ss', 'ha']},
+		    		minutes: {format: ['HH:mm ', 'HH:mm']}
+		    	}
+		    },
 	    },
 	    vAxis: {
 	    	title: 'Umidade do solo (%)'
 	    }
+
 	};
 
 	var chart = new google.visualization.LineChart(document.getElementById('sensor_02'));
@@ -328,21 +373,33 @@ async function grafico_02(quantidade, mes, data_inicial, data_final) {
 
 
 function atualizar () {
-	$('select[name=mes_01]').val('00');
-	$('[name=data_inicial_01]').val();
-	$('[name=data_final_01]').val();
-	$('select[name=mes_02]').val('00');
-	$('[name=data_inicial_02]').val();
-	$('[name=data_final_02]').val();
+	// $('select[name=mes_01]').val('00');
+	// $('[name=data_inicial_01]').val();
+	// $('[name=data_final_01]').val();
+	// $('select[name=mes_02]').val('00');
+	// $('[name=data_inicial_02]').val();
+	// $('[name=data_final_02]').val();
 	filtrar_grafico_01()
 	filtrar_grafico_02()
+
+	setTimeout(atualizar, 15000);
 }
 
 
 
+function limpar_filtro_01(){
+	$('select[name=mes_01]').val('00');
+	$('[name=data_inicial_01]').val('');
+	$('[name=data_final_01]').val('');
+	filtrar_grafico_01()
+}
 
-
-
+function limpar_filtro_02(){
+	$('select[name=mes_02]').val('00');
+	$('[name=data_inicial_02]').val('');
+	$('[name=data_final_02]').val('');
+	filtrar_grafico_02()
+}
 
 
 //REFERENTE A SAIDAS
@@ -402,6 +459,7 @@ function get_on_off_estado(){
 
 
 $(document).ready(function(){
+	atualizar()
 	get_on_off_estado();
 	var estado = 0;
 	$('#toggle-on-off').change(function() {

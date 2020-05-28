@@ -40,9 +40,7 @@
         <?php if(Auth::verifica_sessao($redirect=false)): ?>
         <button class="btn btn-outline-success" type="button" onclick="realizar_medida()">Realizar Medidas</button>
 
-       <button onclick="atualizar()" type="button" class="btn  mx-2 btn-outline-primary">
-        Atualizar 
-      </button>
+ 
   
        
       <?php endif; ?>
