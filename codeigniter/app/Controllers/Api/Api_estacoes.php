@@ -35,4 +35,11 @@ class Api_estacoes extends \CodeIgniter\Controller
 		return $this->respond($estacoes, 200);
 	}
 
+	public function ler_bateria()
+	{
+		$estacoesModel = new EstacoesModel;
+		$estacoes = $estacoesModel->orderBy('data_upload desc')->limit(1)->find();
+		return $this->respond($estacoes, 200);
+	}
+
 }

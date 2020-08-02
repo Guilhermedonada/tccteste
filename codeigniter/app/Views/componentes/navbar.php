@@ -38,7 +38,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <?php if(Auth::verifica_sessao($redirect=false)): ?>
-        <button class="btn btn-outline-success" type="button" onclick="realizar_medida()">Realizar Medidas</button>
+        <button class="btn btn-outline-success" type="button" id="js-realizar-medir" onclick="realizar_medida()">Realizar Medidas</button>
 
  
   

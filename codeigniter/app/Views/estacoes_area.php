@@ -175,6 +175,17 @@
 			</div>
 		</div>
 	</div>
+	<div class="row mt-5" >
+		<div class="col-md-12">
+			<div class="card p-4" >
+				<div class="row">
+					 <div class="col-md-12">
+					 	<p>Bateria carregada: <span id="js-tensao-bateria"></span> %</p>
+					 </div>
+				</div>
+			</div>
+		</div>
+	</div>			
 	  <!-- <div id="sensor_01" style="height: 500px;"></div> -->
 </div>
 
@@ -372,16 +383,24 @@ async function grafico_02(quantidade, mes, data_inicial, data_final) {
 
 
 
+
+function ler_bateria() {
+	 $.ajax({
+		type:'POST',
+		url:"<?=site_url("Api/Api_estacoes/ler_bateria");?>",
+		success:function(response){
+			
+			//console.log(response[0].bateria)
+			$('#js-tensao-bateria').text(response[0].bateria)
+		},
+		error: function(err) {console.log(err)} 
+	})
+}
+
 function atualizar () {
-	// $('select[name=mes_01]').val('00');
-	// $('[name=data_inicial_01]').val();
-	// $('[name=data_final_01]').val();
-	// $('select[name=mes_02]').val('00');
-	// $('[name=data_inicial_02]').val();
-	// $('[name=data_final_02]').val();
 	filtrar_grafico_01()
 	filtrar_grafico_02()
-
+	ler_bateria()
 	setTimeout(atualizar, 15000);
 }
 
@@ -512,10 +531,11 @@ $(document).ready(function(){
 	$('#toggle-deep-sleep').change(function() {
 		if($(this).prop('checked')){
 			console.log('ligado')
-						$('#toggle-on-off').bootstrapToggle('off')
+			$('#toggle-on-off').bootstrapToggle('off')
 			$('#toggle-limite').bootstrapToggle('off')
 			$(".disable-card-on-off").removeClass('d-none');
 			$(".disable-card-limites").removeClass('d-none');
+			$("#js-realizar-medir").addClass('d-none');
 
 			estado = 3;
 		} else {
@@ -523,6 +543,7 @@ $(document).ready(function(){
 			console.log('desligado')
 			$(".disable-card-on-off").addClass('d-none');
 			$(".disable-card-limites").addClass('d-none');
+			$("#js-realizar-medir").removeClass('d-none');
 		}
 
 		$.ajax({
