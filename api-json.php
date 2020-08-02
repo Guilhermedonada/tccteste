@@ -36,7 +36,7 @@ $data_horario = date('Y-m-d H:i:s');
 foreach ($lista_registros as $key => $registro) {
 	print_r($registro);
 	try{
-	$query = "INSERT INTO estacoes (estacao,temperatura, umidade,data_upload) VALUES ('$registro->estacao','$registro->temperatura', '$registro->umidade', '$data_horario')";
+	$query = "INSERT INTO estacoes (estacao,temperatura, umidade,data_upload,bateria) VALUES ('$registro->estacao','$registro->temperatura', '$registro->umidade', '$data_horario' , '$registro->bateria')";
 	}catch(Exception $e){die($e->getMessage());}
 
 	mysqli_query($connect,$query);
