@@ -1,13 +1,13 @@
 <?php namespace App\Models;
 use CodeIgniter\Model;
 
-class AcoesModel extends Model 
+class AgendaModel extends Model 
 {
-	protected $table = 'acoes';
+	protected $table = 'agenda';
     protected $primaryKey = 'id';   
     protected $useSoftDeletes = false;
     //protected $softDelete = false;
     protected $returnType = 'object';
-	protected $allowedFields = ['medir','canal', 'limite_inferior', 'limite_superior' ,'data', 'tempo_leitura'];
+	protected $allowedFields = ['id_usuario','data_criacao', 'data_execucao', 'data_cancelamento','tempo_leitura'];
 
 }

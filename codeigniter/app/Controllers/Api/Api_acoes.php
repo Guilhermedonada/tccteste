@@ -1,6 +1,7 @@
 <?php namespace App\Controllers\Api;
 
 use App\Models\AcoesModel;
+use App\Models\AgendaModel;
 use CodeIgniter\API\ResponseTrait;
 
 class Api_acoes extends \CodeIgniter\Controller
@@ -95,4 +96,110 @@ class Api_acoes extends \CodeIgniter\Controller
 
 		return $this->respond($mensagem, 200);
 	}
+
+
+
+	function TempoLeituras(){
+
+		$agendaModel = new AgendaModel;
+			
+		$tempo = $agendaModel->orderBy('id desc')->limit(1)->find();
+
+		return $this->respond($tempo, 200);
+
+	}
+	
+	public function SalvarAgenda($tempo){
+
+		$agendaModel = new AgendaModel;
+		$data_inicio = time();
+
+		$divisao = 1440 / $tempo; // 1 dia / 1 minuto
+
+
+		$agendaModel->builder()->truncate();
+
+
+		for($i = 0; $i < $divisao; $i++ ) {			
+
+
+			$data = [
+		    	'id_estacao' => 1,
+		    	'data_criacao' => date('Y-m-d H:m:s'),
+		    	'data_execucao' => date('Y-m-d H:m:s',   $data_inicio),
+		    	'data_cancelamento' => NULL,
+		    	'tempo_leitura' => $tempo
+			];
+
+			$agendaModel->builder()->insert($data);
+
+			$data_inicio = $data_inicio + $tempo;
+
+		}
+
+		$mensagem = 'Enviada requisição';
+
+		return $this->respond($mensagem, 200);
+	}
+
+	//executado pelo cron
+	public function DisparadorEventos(){
+
+		$agendaModel = new AgendaModel;
+		$acoesModel = new AcoesModel;	
+
+		$agenda = $agendaModel->where('data_execucao = "' .date('Y-m-d H:m').'"')->limit(1)->find();
+
+		if($agenda){
+
+			$data = [
+        		'medir' => 1
+			];
+
+  			$acoesModel->builder()->update(1, $data);
+ 
+  			$mensagem = 'Enviada requisição';
+
+			return $this->respond($mensagem, 200);
+		}
+
+	}
+
+
+	//executado pelo cron
+	public function CriaAgendaDiaria(){
+
+		$agendaModel = new AgendaModel;
+			
+		$tempo = $agendaModel->orderBy('id desc')->limit(1)->find();
+
+		$data_inicio = time();
+
+		$divisao = 1440 / $tempo; // 1 dia / 1 minuto
+
+
+		$agendaModel->builder()->truncate();
+
+
+		for($i = 0; $i < $divisao; $i++ ) {			
+
+
+			$data = [
+		    	'id_estacao' => 1,
+		    	'data_criacao' => date('Y-m-d H:m:s'),
+		    	'data_execucao' => date('Y-m-d H:m:s',   $data_inicio),
+		    	'data_cancelamento' => NULL,
+		    	'tempo_leitura' => $tempo
+			];
+
+			$agendaModel->builder()->insert($data);
+
+			$data_inicio = $data_inicio + $tempo;
+
+		}
+
+	}
+
+
+
 }

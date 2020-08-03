@@ -7,7 +7,7 @@
 <div class="container py-4" style="margin-top:70px;">
 
 	
-	<div class="row">		
+	<div class="row ">		
 		<div class="col-md-2">
 			<div class="card h-100">
 				<div class="row p-2">
@@ -175,17 +175,25 @@
 			</div>
 		</div>
 	</div>
-	<div class="row mt-5" >
+
+
+	<div class="row mt-5 " >
 		<div class="col-md-12">
 			<div class="card p-4" >
 				<div class="row">
-					 <div class="col-md-12">
+					<div class="col-md-6">
+						<p class="">Tempo das medidas (mínimo 1 minuto):</p><input type="text" placeholder="minutos" class="form-control w-25 float-left mr-4" name="name-tempo-medidas">
+						<button onclick="tempo_leituras()" class="float-left form-control btn-warning w-25">Salvar</button>
+					</div>
+					 <div class="col-md-6">
 					 	<p>Bateria carregada: <span id="js-tensao-bateria"></span> %</p>
 					 </div>
 				</div>
 			</div>
 		</div>
-	</div>			
+	</div>	
+
+		
 	  <!-- <div id="sensor_01" style="height: 500px;"></div> -->
 </div>
 
@@ -471,15 +479,55 @@ function get_on_off_estado(){
 				console.log('desligado')
 			}
 
+			// realiza_leituras();
 		}
 	})
 }
 
 
 
+function tempo_leituras(){
+	
+	var tempo = $('input[name=name-tempo-medidas]').val();
+
+	 $.ajax({
+		type:'POST',
+		url:"<?=site_url("Api/Api_acoes/SalvarAgenda/");?>" + tempo,
+		success:function(data){
+			console.log(data);
+
+		}
+	})
+}
+
+function get_tempo_leituras(){
+	 $.ajax({
+		type:'POST',
+		url:"<?=site_url("Api/Api_acoes/TempoLeituras");?>",
+		success:function(data){
+			console.log(data);
+			$('input[name=name-tempo-medidas]').val(data[0].tempo_leitura);
+
+
+		}
+	})
+
+}
+
+
+			
+// function realiza_leituras(){
+// 	realizar_medida()
+// 	console.log('eai')
+// 	setTimeout(realiza_leituras, $('input[name=name-tempo-medidas]').val());
+// }
+
+
+
 $(document).ready(function(){
-	atualizar()
+	atualizar()	
 	get_on_off_estado();
+	get_tempo_leituras();
 	var estado = 0;
 	$('#toggle-on-off').change(function() {
 		if($(this).prop('checked')){
@@ -556,6 +604,8 @@ $(document).ready(function(){
 		}) 
     })
 });
+
+
 
 
 
