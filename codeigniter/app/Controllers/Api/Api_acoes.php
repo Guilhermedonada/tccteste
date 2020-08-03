@@ -115,8 +115,9 @@ class Api_acoes extends \CodeIgniter\Controller
 
 		date_default_timezone_set('America/Sao_Paulo');
 
+
 		$agendaModel = new AgendaModel;
-		$data_inicio = time();
+		
 
 		$divisao = 86400 / $tempo; // 1 dia / 1 minuto
 
@@ -124,20 +125,40 @@ class Api_acoes extends \CodeIgniter\Controller
 		$agendaModel->builder()->truncate();
 
 
+		$data_inicio =  time();
 		for($i = 0; $i < $divisao; $i++ ) {			
 
 
+		
+		
+
 			$data = [
 		    	'id_estacao' => 1,
-		    	'data_criacao' => date('Y-m-d H:m:s'),
-		    	'data_execucao' => date('Y-m-d H:m:s',   $data_inicio),
+		    	'data_criacao' =>  date('Y-m-d H:i:s'),
+		    	'data_execucao' =>   date('Y-m-d H:i:s',   $data_inicio),
 		    	'data_cancelamento' => NULL,
 		    	'tempo_leitura' => $tempo
 			];
 
 			$agendaModel->builder()->insert($data);
 
-			$data_inicio = $data_inicio + $tempo;
+			$data_inicio = $data_inicio + 60;	
+			
+
+			
+			
+			
+
+		
+
+
+
+			
+			
+
+
+
+			echo "<pre>";  print_r($data_inicio); echo "</pre>";
 
 		}
 
@@ -154,7 +175,7 @@ class Api_acoes extends \CodeIgniter\Controller
 		$agendaModel = new AgendaModel;
 		$acoesModel = new AcoesModel;	
 
-		$agenda = $agendaModel->where('data_execucao = "' .date('Y-m-d H:m').'"')->limit(1)->find();
+		$agenda = $agendaModel->where('data_execucao = "' .date('Y-m-d H:i').'"')->limit(1)->find();
 
 		if($agenda){
 
@@ -194,8 +215,8 @@ class Api_acoes extends \CodeIgniter\Controller
 
 			$data = [
 		    	'id_estacao' => 1,
-		    	'data_criacao' => date('Y-m-d H:m:s'),
-		    	'data_execucao' => date('Y-m-d H:m:s',   $data_inicio),
+		       	'data_criacao' =>  date('Y-m-d H:i:s'),
+		    	'data_execucao' =>   date('Y-m-d H:i:s',   $data_inicio),
 		    	'data_cancelamento' => NULL,
 		    	'tempo_leitura' => $tempo
 			];
