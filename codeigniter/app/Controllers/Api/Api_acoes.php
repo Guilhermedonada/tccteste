@@ -80,6 +80,8 @@ class Api_acoes extends \CodeIgniter\Controller
 
 	public function DeepSleep($estado)
 	{
+		date_default_timezone_set('America/Sao_Paulo');
+		
 		$acoesModel = new AcoesModel;
 
 		$data = [
@@ -110,6 +112,8 @@ class Api_acoes extends \CodeIgniter\Controller
 	}
 	
 	public function SalvarAgenda($tempo){
+
+		date_default_timezone_set('America/Sao_Paulo');
 
 		$agendaModel = new AgendaModel;
 		$data_inicio = time();
@@ -145,6 +149,8 @@ class Api_acoes extends \CodeIgniter\Controller
 	//executado pelo cron
 	public function DisparadorEventos(){
 
+		date_default_timezone_set('America/Sao_Paulo');
+
 		$agendaModel = new AgendaModel;
 		$acoesModel = new AcoesModel;	
 
@@ -168,6 +174,8 @@ class Api_acoes extends \CodeIgniter\Controller
 
 	//executado pelo cron
 	public function CriaAgendaDiaria(){
+
+		date_default_timezone_set('America/Sao_Paulo');
 
 		$agendaModel = new AgendaModel;
 			
