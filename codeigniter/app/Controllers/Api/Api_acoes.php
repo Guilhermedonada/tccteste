@@ -142,7 +142,7 @@ class Api_acoes extends \CodeIgniter\Controller
 
 			$agendaModel->builder()->insert($data);
 
-			$data_inicio = $data_inicio + 60;	
+			$data_inicio = $data_inicio + $tempo;	
 			
 
 			
@@ -172,10 +172,31 @@ class Api_acoes extends \CodeIgniter\Controller
 
 		date_default_timezone_set('America/Sao_Paulo');
 
+		$data_local = date('Y-m-d H:i:s');
+
 		$agendaModel = new AgendaModel;
 		$acoesModel = new AcoesModel;	
 
-		$agenda = $agendaModel->where('data_execucao = "' .date('Y-m-d H:i').'"')->limit(1)->find();
+		// $where = "MONTH(".$data_local.") = MONTH(data_execucao) AND YEAR(".$data_local.") = YEAR(data_execucao) AND DAY(".$data_local.") = DAY(data_execucao) AND HOUR(".$data_local.") = HOUR(data_execucao) AND MINUTE(".$data_local.") = MINUTE(data_execucao)";
+
+		$data = time();
+
+		$p1 = $data - 60;
+		$p2 = $data + 60;
+		$data_anterior = date('Y-m-d H:i:s' , $p1);
+		$data_proxima = date('Y-m-d H:i:s' , $p2);
+
+		$agenda = $agendaModel->builder()->query('SELECT * FROM agenda WHERE data_execucao BETWEEN "'.$data_anterior.'"  AND "'.$data_proxima.'"   LIMIT 1')->getResult();
+
+		//$agenda = $agendaModel->builder()->where('data_execucao = " '.date('Y-m-d H:i').'  "')->limit(1)->find();
+		
+	
+		//$agenda =  $agendaModel->builder()->getLastQuery();
+		// $agenda = $agendaModel->builder()->where('DATE(data_execucao) BETWEEN '.$data_local. ' 00:00:00 AND '.$data_local. ' 23:59:59 ')->limit(1)->find();
+
+		// where('data_execucao = " '.date('Y-m-d H:i').'  "')
+
+		print_r($agenda);
 
 		if($agenda){
 
