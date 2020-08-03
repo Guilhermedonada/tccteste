@@ -81,7 +81,7 @@ class Api_acoes extends \CodeIgniter\Controller
 	public function DeepSleep($estado)
 	{
 		date_default_timezone_set('America/Sao_Paulo');
-		
+
 		$acoesModel = new AcoesModel;
 
 		$data = [
@@ -118,7 +118,7 @@ class Api_acoes extends \CodeIgniter\Controller
 		$agendaModel = new AgendaModel;
 		$data_inicio = time();
 
-		$divisao = 1440 / $tempo; // 1 dia / 1 minuto
+		$divisao = 86400 / $tempo; // 1 dia / 1 minuto
 
 
 		$agendaModel->builder()->truncate();
@@ -183,7 +183,7 @@ class Api_acoes extends \CodeIgniter\Controller
 
 		$data_inicio = time();
 
-		$divisao = 1440 / $tempo; // 1 dia / 1 minuto
+		$divisao = 86400 / $tempo; // 1 dia / 1 minuto
 
 
 		$agendaModel->builder()->truncate();

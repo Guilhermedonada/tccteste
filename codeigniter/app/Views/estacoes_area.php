@@ -182,7 +182,7 @@
 			<div class="card p-4" >
 				<div class="row">
 					<div class="col-md-6">
-						<p class="">Tempo das medidas (mínimo 1 minuto):</p><input type="text" placeholder="minutos" class="form-control w-25 float-left mr-4" name="name-tempo-medidas">
+						<p class="">Tempo das medidas (mínimo 1 minuto):</p><input type="text" placeholder="segundos" class="form-control w-25 float-left mr-4" name="name-tempo-medidas">
 						<button onclick="tempo_leituras()" class="float-left form-control btn-warning w-25">Salvar</button>
 					</div>
 					 <div class="col-md-6">
