@@ -144,20 +144,6 @@ class Api_acoes extends \CodeIgniter\Controller
 
 			$data_inicio = $data_inicio + $tempo;	
 			
-
-			
-			
-			
-
-		
-
-
-
-			
-			
-
-
-
 			echo "<pre>";  print_r($data_inicio); echo "</pre>";
 
 		}
@@ -177,8 +163,6 @@ class Api_acoes extends \CodeIgniter\Controller
 		$agendaModel = new AgendaModel;
 		$acoesModel = new AcoesModel;	
 
-		// $where = "MONTH(".$data_local.") = MONTH(data_execucao) AND YEAR(".$data_local.") = YEAR(data_execucao) AND DAY(".$data_local.") = DAY(data_execucao) AND HOUR(".$data_local.") = HOUR(data_execucao) AND MINUTE(".$data_local.") = MINUTE(data_execucao)";
-
 		$data = time();
 
 		$p1 = $data - 60;
@@ -188,13 +172,6 @@ class Api_acoes extends \CodeIgniter\Controller
 
 		$agenda = $agendaModel->builder()->query('SELECT * FROM agenda WHERE data_execucao BETWEEN "'.$data_anterior.'"  AND "'.$data_proxima.'"   LIMIT 1')->getResult();
 
-		//$agenda = $agendaModel->builder()->where('data_execucao = " '.date('Y-m-d H:i').'  "')->limit(1)->find();
-		
-	
-		//$agenda =  $agendaModel->builder()->getLastQuery();
-		// $agenda = $agendaModel->builder()->where('DATE(data_execucao) BETWEEN '.$data_local. ' 00:00:00 AND '.$data_local. ' 23:59:59 ')->limit(1)->find();
-
-		// where('data_execucao = " '.date('Y-m-d H:i').'  "')
 
 		print_r($agenda);
 
@@ -223,6 +200,9 @@ class Api_acoes extends \CodeIgniter\Controller
 			
 		$tempo = $agendaModel->orderBy('id desc')->limit(1)->find();
 
+		
+		$tempo = $tempo[0]->tempo_leitura;
+	
 		$data_inicio = time();
 
 		$divisao = 86400 / $tempo; // 1 dia / 1 minuto
