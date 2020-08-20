@@ -101,7 +101,7 @@ class Api_acoes extends \CodeIgniter\Controller
 
 
 
-	function TempoLeituras(){
+	public function TempoLeituras(){
 
 		$agendaModel = new AgendaModel;
 			
@@ -173,15 +173,23 @@ class Api_acoes extends \CodeIgniter\Controller
 		$agenda = $agendaModel->builder()->query('SELECT * FROM agenda WHERE data_execucao BETWEEN "'.$data_anterior.'"  AND "'.$data_proxima.'"   LIMIT 1')->getResult();
 
 
-		print_r($agenda);
+		//print_r($agenda[0]->tempo_leitura);
 
 		if($agenda){
 
 			$data = [
-        		'medir' => 1
-			];
+        		'medir' => 1,
+			];     		
 
   			$acoesModel->builder()->update(1, $data);
+
+  			$data2 = [
+        		'tempo_leitura' => $agenda[0]->tempo_leitura,
+			];
+
+			$acoesModel->builder()->update(2, $data2);
+  			//print_r($data);
+  			//die();
  
   			$mensagem = 'Enviada requisição';
 
