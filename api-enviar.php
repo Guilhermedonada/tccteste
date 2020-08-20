@@ -28,7 +28,7 @@ $row = mysqli_fetch_assoc($result);
 echo $row['medir'] ;
 
 
-$query_on_off = "SELECT medir,canal,limite_inferior,limite_superior FROM acoes WHERE id = '2'";
+$query_on_off = "SELECT medir,canal,limite_inferior,limite_superior,tempo_leitura FROM acoes WHERE id = '2'";
 
 $result_on_off = mysqli_query($connect,$query_on_off);
 
