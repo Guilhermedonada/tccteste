@@ -213,7 +213,7 @@ class Api_acoes extends \CodeIgniter\Controller
 	
 		$data_inicio = time();
 
-		$divisao = 86400 / $tempo; // 1 dia / 1 minuto
+		$divisao = 172800 / $tempo; // 1 dia / 1 minuto
 
 
 		$agendaModel->builder()->truncate();
