@@ -7,7 +7,7 @@
 $dbname = 'tcc';
 $dbuser = 'ec2-user';  
 $dbpass = 't44zg1g1'; 
-$dbhost = '3.21.242.90'; 
+$dbhost = '52.14.178.251'; 
 
 
 
