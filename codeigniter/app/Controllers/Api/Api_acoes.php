@@ -30,7 +30,7 @@ class Api_acoes extends \CodeIgniter\Controller
 		$acoesModel = new AcoesModel;
 
 		$data0 = [
-        	'medir' => 1;
+        	'medir' => 1,
 		];
 
 		$data = [
