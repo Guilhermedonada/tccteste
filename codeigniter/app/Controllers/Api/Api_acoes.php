@@ -67,6 +67,11 @@ class Api_acoes extends \CodeIgniter\Controller
 
 		$acoesModel = new AcoesModel;
 
+		$data0 = [
+        	'medir' => 1,
+		];
+
+
 		$data = [
         	'medir' => $estado,
         	'canal' => $canal,
@@ -75,7 +80,10 @@ class Api_acoes extends \CodeIgniter\Controller
         	'data' => date('Y-m-d H:m:s')
 		];
 
+		
+		$acoesModel->builder()->update(1, $data0);
   		$acoesModel->builder()->update(2, $data);
+
  
   		$mensagem = 'Enviada requisição';
 
