@@ -21,7 +21,7 @@ if(!$connect){
 echo "Connection Success!<br><br>";
 
 
-$json = $_GET["json"];
+$json = $_POST["json"];
 
 #$json = '{"0":{"estacao":"AA_01","temperatura":"100"},"1":{"estacao":"AA_01","temperatura":"123"},"2":{"estacao":"AA_01","temperatura":"100"},"3":{"estacao":"AA_01","temperatura":"123"},"4":{"estacao":"AA_01","temperatura":"102"},"5":{"estacao":"AA_01","temperatura":"100"}}';
 
