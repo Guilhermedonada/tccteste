@@ -97,6 +97,8 @@ class Api_acoes extends \CodeIgniter\Controller
 
 		$acoesModel = new AcoesModel;
 
+
+
 		$data = [
         	'medir' => $estado,
         	'canal' => 0,
@@ -106,6 +108,8 @@ class Api_acoes extends \CodeIgniter\Controller
 		];
 
   		$acoesModel->builder()->update(2, $data);
+
+  		//print_r($acoesModel->getLastQuery()->getQuery());die();
  
   		$mensagem = 'Enviada requisição';
 
@@ -128,22 +132,14 @@ class Api_acoes extends \CodeIgniter\Controller
 
 		date_default_timezone_set('America/Sao_Paulo');
 
-
-		$agendaModel = new AgendaModel;
-		
+		$agendaModel = new AgendaModel;	
 
 		$divisao = 86400 / $tempo; // 1 dia / 1 minuto
 
-
 		$agendaModel->builder()->truncate();
 
-
 		$data_inicio =  time();
-		for($i = 0; $i < $divisao; $i++ ) {			
-
-
-		
-		
+		for($i = 0; $i < $divisao; $i++ ) {					
 
 			$data = [
 		    	'id_estacao' => 1,
